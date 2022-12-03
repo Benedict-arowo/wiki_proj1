@@ -2,10 +2,15 @@ from django.shortcuts import render
 from . import util
 import markdown2
 
+
 from markdown2 import Markdown
 
 error= {"message": "ERROR: This entry does not exist" }
 entries = util.list_entries()
+
+
+
+
 
 
 #converts markdown content to html

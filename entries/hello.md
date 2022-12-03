@@ -1,0 +1,1 @@
+hi. Now notice it will only display the content and not the title when i create this page.
