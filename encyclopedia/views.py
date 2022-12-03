@@ -88,17 +88,8 @@ def search(request):
 def new_page(request):
 
     error= {"message": "Entry page exists. Try something different"}
-    if request.method == "POST":
-        data = {
-        'title': request.POST['title'],
-        'content': request.POST['content']
-        }
-
-        form = CreateASomethingForm(data)
-
-        if form.is_valid():
-            form.commit(save)
-        return render (request, "encyclopedia/new_page.html", form)
+    if request.method == "GET":
+        return render (request, "encyclopedia/new_page.html")
     else:
         title = request.POST['title']
         content = request.POST['content']
