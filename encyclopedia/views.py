@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from . import util
 import markdown2
-
+from django.shortcuts import redirect
 
 from markdown2 import Markdown
 
@@ -28,8 +28,9 @@ def md_to_html(title):
 #INDEX: Updates index.html such that, instead of merely listing the names of all pages in the encyclopedia,
 #user can click on any entry name to be taken directly to that entry page.
 def index(request):
-    file = {"entries": entries}
-    return render(request, "encyclopedia/index.html", file )
+    # file = {"entries": entries}
+    file = util.list_entries()
+    return render(request, "encyclopedia/index.html", { "entries": file} )
 
 
 
@@ -93,20 +94,20 @@ def search(request):
 def new_page(request):
 
     error= {"message": "Entry page exists. Try something different"}
+
     if request.method == "GET":
         return render (request, "encyclopedia/new_page.html")
-    else:
+
+    elif request.method == "POST":
         title = request.POST['title']
         content = request.POST['content']
         title_exists = util.get_entry(title)
-        if title_exists is not None:
-            return render(request, "encyclopedia/error.html" , error)
+        if title_exists == None:
+            
+            util.save_entry(title,  bytes(content, 'utf8'))
+            return redirect('entry', title=title)
         else:
-            util.save_entry(title, content)
-            new_content = md_to_html(title)
-            file= {"title": title , "content": new_content }
-
-            return render(request, "encyclopedia/entry.html", file)
+            return render(request, "encyclopedia/error.html" , error)
 
 
 
